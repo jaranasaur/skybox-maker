@@ -83,7 +83,9 @@ int main() {
     for (int x = 0; x < IMG_WIDTH; ++x) {
       float xPos = (float)x / IMG_WIDTH;
       float yPos = (float)y / IMG_HEIGHT;
+      // for each image or face of the cube
       for (int i = 0; i < NUM_IMAGES; i++) {
+        // start to find the pixel's position in 3D space on the face of the cube
         vec3Subtract(planes[i][1], planes[i][0], origX);
         vec3Subtract(planes[i][3], planes[i][0], origY);
 
@@ -94,17 +96,17 @@ int main() {
 
         vec3Add(pix, planes[i][0], pix);
 
-        // normalize the vector (scale it to length of 1.0)
-        vec3Scale(pix, 1.0f / vec3Dist(v3Origin, pix), pix);
+        // normalize the pixel's vector (scale it to length of 1.0) aka map it to the edge of sphere
+        vec3Scale(pix, 1.0f / vec3Dist(v3Origin, pix), pix); // remove this line to see the pixels mapped to the inside of a cube rather than a sphere
 
         r = g = b = 0;
 
-        // examples to play around with
+        // pixel shading examples to play around with &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
         
         // colors get more intense the further along the axis they are
-        if (pix.x >= 0) r = (unsigned char)roundf(pix.x * 255.0f);
-        if (pix.y >= 0) b = (unsigned char)roundf(pix.y * 255.0f);
-        if (pix.z >= 0) g = (unsigned char)roundf(pix.z * 255.0f);
+        if (pix.x >= 0) r = pix.x * 255.0f;
+        if (pix.y >= 0) b = pix.y * 255.0f;
+        if (pix.z >= 0) g = pix.z * 255.0f;
 
         // some weird rings
         // b = (unsigned char)roundf(fabsf(sinf(100 * pix.y * M_PI) / 2.0f + .5f) * 255.0f);
@@ -114,7 +116,7 @@ int main() {
         // g = (unsigned char)roundf(fabsf(pix.x) * 255.0f);
         // r = (unsigned char)roundf(fabsf(pix.z) * 255.0f);
         
-        // end examples
+        // end examples &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
         p = { b, g, r };
         imgs[i].pixels[pixIndex] = p;
